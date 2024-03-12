@@ -1,0 +1,183 @@
+.App {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+
+}
+body {
+  margin:0;
+  padding:0;
+
+}
+h1 {
+  text-align: center;
+}
+.register,.login {
+  margin-top:200px;
+  width:50%;
+background-color:lightgray;
+ box-shadow: 0 0 5px rgba(0,0,0,.3);
+ font-size: 20px;
+}
+.register input,.login input {
+  border:none;
+  outline: none;;
+}
+.register h2 ,.login h2 {
+  text-align: center;
+}
+.register button,.login button  {
+  width:50%;
+  margin-left:25%;
+  padding:7px;
+  border:none;
+  outline:none;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.label {
+  font-weight:bold;
+  margin-bottom: 5px;
+}
+input {
+  padding:10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+.navbar {
+  margin:0;
+  width:100%;
+  height:30%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color:white;
+  text-decoration: none;
+}
+a {
+  color:white;
+  text-decoration: none;
+  margin:10px;
+  font-size:25px;
+}
+.create-recipe {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding:20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,.1);
+  margin:20px;
+  width:400px;
+
+}
+.create-recipe form {
+  display: flex;
+  flex-direction: column;
+}
+ul {
+  list-style-type:none;
+  padding:0;
+  margin:0;
+  margin-top: 40px;
+}
+li {
+
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
+ padding :10px;
+ margin-bottom: 40px;
+ height:400px;
+ width:100%;
+ 
+}
+li img {
+  object-fit:cover;
+  height:300px;
+  width:100%;
+}
+h2 {
+  margin-top: 0;
+}
+
+.delete_recipe {
+  display: flex;
+  justify-content:space-between;
+}
+.delete_recipe button {
+  background-color: red;
+  cursor:pointer;
+  color:white;
+  border:none;
+  border-radius: 50%;
+  height:40px;
+}
+@media (min-width:200px) and (max-width: 800px) {
+  .app {
+    width:100%;
+  }
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    width:100%;
+    height:30%;
+  }
+  .list-group {
+    width:100%;
+   display: flex;
+   flex-direction: column;
+    justify-content: space-around;
+    row-gap: 70px;
+    align-items: center;
+  }
+}
+@media (min-width:800px) and (max-width: 1000px) {
+ 
+  .list-group {
+    width:auto;
+    display:grid;
+    grid-template-columns:1fr;
+    column-gap: 50px;
+    row-gap: 80px;
+    justify-content: space-around;
+    align-items: center;
+  }
+}
+@media (min-width:1000px){
+ 
+  .list-group {
+    width:100%;
+   display: flex;
+   flex-direction: column;
+    justify-content: space-around;
+    row-gap: 90px;
+    align-items: center;
+  }
+}
+.first-desc {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 70px;
+}
+.first-desc button{
+   background-color: red;
+   color:white;
+   padding:10px;
+   border:none;
+   cursor:pointer;
+   border-radius: 50%;
+}
+.auth {
+  width:100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  height:50px;
+}
