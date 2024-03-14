@@ -11,7 +11,7 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/auth/register", {
+      const response = await axios.post("http://localhost:3005/auth/register", {
         username,
         password,
       });
@@ -22,6 +22,7 @@ const Register = () => {
         alert(error.response.data.message); // Display error message from backend
       } else {
         console.error(error);
+        alert("Registration failed. Please try again.");
       }
     }
   };
@@ -42,6 +43,7 @@ const Register = () => {
             id="username"
             value={username}
             onChange={(event) => setUsername(event.target.value)}
+            required
           />
         </div>
         <div className="form-group">
@@ -51,6 +53,7 @@ const Register = () => {
             id="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            required
           />
         </div>
         <button

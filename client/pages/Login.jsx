@@ -1,20 +1,20 @@
 import { useCookies } from "react-cookie";
-import React,{useState,useEffect} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-const Login = () => {
-  const [_, setCookies] = useCookies(["access_token"]);
+
+export default function Login() {
+  const [cookies, setCookies] = useCookies(["access_token"]);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const result = await axios.post("http://localhost:3001/auth/login", {
+      const result = await axios.post("http://localhost:3005/auth/login", {
         username,
         password,
       });
@@ -23,7 +23,7 @@ const Login = () => {
       window.localStorage.setItem("userID", result.data.userID);
       navigate("/");
     } catch (error) {
-      console.error(error);
+      console.error("Login failed:", error);
     }
   };
 
@@ -53,5 +53,4 @@ const Login = () => {
       </form>
     </div>
   );
-};
-export default Login;
+}

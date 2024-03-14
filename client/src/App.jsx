@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import Navbar from './components/Navvbar';
 import Home from '../pages/Home';
-import CreateRecipe from '../pages/CreateRecipe';
-import SavedRecipes from '../pages/savedRecipes';
+import CreatePost from '../pages/createPost';
+import SavedPosts from '../pages/SavedPosts';
 import Register from '../pages/Register';
 import Login from '../pages/Login';
-import Navbar from './components/Navvbar';
 
-
-const App=() =>{
+const App = () => { // Corrected the component name to start with a capital letter
   return (
     <div className="App">
       <Router>
-       <Navbar/>
+        <Navbar/>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
-          <Route path="/create-recipe" element={<CreateRecipe/>} />
-          <Route path="/saved-recipes" element={<SavedRecipes/>} />
+          <Route path="/create-post" element={<CreatePost/>} />
+         <Route path="/saved-posts" element={<SavedPosts/>} />
         </Routes>
       </Router>
     </div>
   );
 }
 
-export default App;
+export default App; // Corrected the export statement
