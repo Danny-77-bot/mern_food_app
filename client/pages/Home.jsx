@@ -17,25 +17,8 @@ const Home = () => {
       }
     };
 
-    const fetchSavedPosts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3005/posts/savedPosts/${userID}`
-        );
-        const savedPostsData = response.data.savedPosts;
-        const savedState = savedPostsData.reduce((acc, post) => {
-          acc[post._id] = true;
-          return acc;
-        }, {});
-        setIsPostSaved(savedState);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     fetchPosts();
-    fetchSavedPosts();
-  }, [userID]);
+  }, []);
 
   const savePost = async (postId) => {
     try {
@@ -50,7 +33,7 @@ const Home = () => {
       console.log("Response from server:", response.data);
 
       // Update local state
-      setIsPostSaved(prevState => ({
+      setIsPostSaved((prevState) => ({
         ...prevState,
         [postId]: true
       }));
@@ -65,27 +48,47 @@ const Home = () => {
     }
   };
 
+
+      const deleteCreatedPost = async (postId) => {
+  try {
+    const response = await axios.delete("http://localhost:3005/posts/deletePost", {
+      data: { userID, postId } // Send userID and postId as an object
+    });
+    console.log(response.data);
+
+    // Remove the deleted post from the local state
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   return (
     <div>
       <h1>Posts</h1>
       <ul>
         {posts.map((post) => (
           <li key={post._id}>
-            <div>
+            <div className="home-post-box">
               <h2>{post.name}</h2>
-              <button
-                onClick={() => savePost(post._id)}
-                disabled={isPostSaved[post._id]} // Disable button if post is already saved
-              >
-                {isPostSaved[post._id] ? "Saved" : "Save"}
-              </button>
+              <div>{post.description}</div>
+              <div className="home-btn">
+                <button
+                  onClick={() => savePost(post._id)}
+                  disabled={isPostSaved[post._id]} // Disable button if post is already saved
+                >
+                  {isPostSaved[post._id] ? "Saved" : "Save"}
+                </button>
+                {post.userOwner === userID && (
+                  <button onClick={() => deleteCreatedPost(post._id)}>X</button>
+                )}
+              </div>
               {post.imageUrl && (
                 <img
                   src={`http://localhost:3005/api/assets/uploads/${post.imageUrl}`}
                   alt={post.name}
                 />
               )}
-              <div>{post.description}</div>
             </div>
           </li>
         ))}

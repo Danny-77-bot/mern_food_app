@@ -211,3 +211,14 @@ gap: 70px;
 button {
   cursor:pointer;
 }
+.home-post-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.home-post-box .home-post-btn {
+  display: flex;
+  justify-content: space-between;
+ 
+}

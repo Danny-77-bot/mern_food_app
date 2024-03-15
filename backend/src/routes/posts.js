@@ -117,13 +117,29 @@ router.get("/savedPosts/:userID", async (req, res) => {
     }
 
     // Populate the savedPosts array with the actual post objects
-    const savedPosts = await PostModel.find({ _id: { $in: user.savedPosts } });
-      console.log(savedPosts);
-    res.status(200).json({ savedPosts });
+    const savedPosts = await PostModel.find({ _id: { $in: user.savedPosts} });
+     console.log(savedPosts);
+     res.status(200).json({ savedPosts });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
+router.delete("/deletePost", async (req, res) => {
+  const { userID, postId } = req.body;
+
+  try {
+    const post = await PostModel.findOne({ _id: postId }).exec();
+    const userPosts = await PostModel.find({ userOwner: post.userOwner }).exec();
+    // console.log("Posts owned by user:", userPosts);
+    await PostModel.deleteOne({ _id: postId }).exec();
+     res.json(userPosts);
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// before update the
 export { router as postRouter };
