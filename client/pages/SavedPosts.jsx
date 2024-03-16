@@ -5,6 +5,7 @@ import { useGetUserID } from "../src/hooks/useGetUserId";
 export default function SavedRecipes() {
   const [savedPosts, setSavedPosts] = useState([]);
   const userID = useGetUserID();
+
   useEffect(() => {
     const fetchSavedPosts = async () => {
       try {
@@ -19,6 +20,15 @@ export default function SavedRecipes() {
     fetchSavedPosts();
   }, [userID]); // Include userID as a dependency for useEffect
 
+  const deleteSavedPost = async (postID) => {
+    try {
+      await axios.delete(`http://localhost:3005/posts/deleteSaved/${postID}`);
+      setSavedPosts(savedPosts.filter((post) => post._id !== postID));
+    } catch (error) {
+      console.error("Error deleting saved post", error);
+    }
+  };
+
   return (
     <div>
       <h1>Saved Posts</h1>
@@ -26,6 +36,7 @@ export default function SavedRecipes() {
         {savedPosts.map((post) => (
           <li key={post._id}>
             <div>
+              <button onClick={() => deleteSavedPost(post._id)}>X</button>
               <h2>{post.name}</h2>
             </div>
             <p>{post.description}</p>

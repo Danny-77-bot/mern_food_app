@@ -4,14 +4,19 @@ import { useGetUserID } from "../src/hooks/useGetUserId";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [isPostSaved, setIsPostSaved] = useState({});
+  const [isPostSaved, setIsPostSaved] = useState([]);
   const userID = useGetUserID();
 
+  // Load saved posts on initial render
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("http://localhost:3005/posts");
         setPosts(response.data);
+
+        // Fetch the saved post IDs from local storage
+        const savedPosts = JSON.parse(localStorage.getItem("savedPosts")) || [];
+        setIsPostSaved(savedPosts);
       } catch (err) {
         console.log(err);
       }
@@ -22,46 +27,37 @@ const Home = () => {
 
   const savePost = async (postId) => {
     try {
-      console.log("Post ID:", postId);
-      console.log("User ID:", userID);
-
-      const response = await axios.put("http://localhost:3005/posts", {
+      await axios.put("http://localhost:3005/posts/save", {
         postId,
         userID
       });
 
-      console.log("Response from server:", response.data);
-
-      // Update local state
-      setIsPostSaved((prevState) => ({
-        ...prevState,
-        [postId]: true
-      }));
-
-      // Update local storage
-      localStorage.setItem("savedPosts", JSON.stringify({
-        ...isPostSaved,
-        [postId]: true
-      }));
+      // Update the saved post IDs in local storage and state
+      const updatedSavedPosts = [...isPostSaved, postId];
+      localStorage.setItem("savedPosts", JSON.stringify(updatedSavedPosts));
+      setIsPostSaved(updatedSavedPosts);
     } catch (error) {
-      console.error("Error while saving post:", error);
+      console.log(error);
     }
   };
 
+  const deleteCreatedPost = async (postId) => {
+    try {
+      await axios.delete("http://localhost:3005/posts/deletePost", {
+        data: { userID, postId } // Send userID and postId as an object
+      });
 
-      const deleteCreatedPost = async (postId) => {
-  try {
-    const response = await axios.delete("http://localhost:3005/posts/deletePost", {
-      data: { userID, postId } // Send userID and postId as an object
-    });
-    console.log(response.data);
+      // Remove the deleted post from the saved post IDs in local storage and state
+      const updatedSavedPosts = isPostSaved.filter((savedPostId) => savedPostId !== postId);
+      localStorage.setItem("savedPosts", JSON.stringify(updatedSavedPosts));
+      setIsPostSaved(updatedSavedPosts);
 
-    // Remove the deleted post from the local state
-    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-  } catch (error) {
-    console.log(error);
-  }
-};
+      // Remove the deleted post from the local state
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -69,20 +65,30 @@ const Home = () => {
       <ul>
         {posts.map((post) => (
           <li key={post._id}>
-            <div className="home-post-box">
-              <h2>{post.name}</h2>
-              <div>{post.description}</div>
-              <div className="home-btn">
+            <div className="home-btn">
+              <div>
                 <button
                   onClick={() => savePost(post._id)}
-                  disabled={isPostSaved[post._id]} // Disable button if post is already saved
+                  disabled={isPostSaved.includes(post._id)}
+                  style={{
+                    backgroundColor: isPostSaved.includes(post._id) ? "rgba(0,0,0, 0.5)" : "black"
+                  }}
                 >
-                  {isPostSaved[post._id] ? "Saved" : "Save"}
+                  {isPostSaved.includes(post._id) ? "Saved" : "Save"}
                 </button>
+              </div>
+
+              <div>
                 {post.userOwner === userID && (
                   <button onClick={() => deleteCreatedPost(post._id)}>X</button>
                 )}
               </div>
+            </div>
+
+            <div className="home-post-box">
+              <h2>{post.name}</h2>
+              <div>{post.description}</div>
+
               {post.imageUrl && (
                 <img
                   src={`http://localhost:3005/api/assets/uploads/${post.imageUrl}`}

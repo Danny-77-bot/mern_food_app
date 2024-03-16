@@ -14,7 +14,7 @@ const Navbar = () => {
 
   return (
     <div className="navbar">
-      <h1>DannySocial</h1>
+        <img src={`/logo.png`} alt="logo" />
       {cookies.access_token && <Link to="/">Home</Link>}
       {cookies.access_token && <Link to="/create-post">Create Post</Link>}
       {cookies.access_token && <Link to="/saved-posts">Saved Posts</Link>}

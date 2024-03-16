@@ -93,7 +93,7 @@ h2 {
 
 
 
-@media (min-width:200px) and (max-width: 800px) {
+@media (max-width: 800px) {
   .app {
     width:100%;
   }
@@ -123,6 +123,10 @@ h2 {
     justify-content: space-around;
     align-items: center;
   }
+  .navbar img {
+    width:120px;
+    margin-right: 300px;
+  }
 }
 @media (min-width:1000px){
  
@@ -134,21 +138,13 @@ h2 {
     row-gap: 90px;
     align-items: center;
   }
+  .navbar img {
+    width:120px;
+    margin-right: 500px;
+  }
 }
-.first-desc {
-display: flex;
-justify-content: space-between;
-align-items: center;
-gap: 70px;
-}
-.first-desc button{
-   background-color: red;
-   color:white;
-   padding:10px;
-   border:none;
-   cursor:pointer;
-   border-radius: 50%;
-}
+
+
 .auth {
   width:100%;
   display: grid;
@@ -217,8 +213,17 @@ button {
   align-items: center;
   justify-content: center;
 }
-.home-post-box .home-post-btn {
-  display: flex;
-  justify-content: space-between;
- 
+.home-btn{
+display: flex;
+justify-content:space-between;
+}
+.home-btn button {
+  background-color: black;
+  color:white;
+  border: none;
+  border-radius:30px;
+}
+.navbar img {
+width: 100px;
+margin-left:0;
 }

@@ -73,42 +73,36 @@ router.get("/", async (req, res) => {
 });
 
 // Save a post
-router.put("/", async (req, res) => {
+router.put("/save", async (req, res) => {
   const { postId, userID } = req.body;
-
+  console.log(postId,userID);
   try {
     const user = await UserModel.findById(userID);
-    const post = await PostModel.findById(postId);
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
-    const isSaved = user.savedPosts.some(savedPost => savedPost.equals(post._id));
-
-    if (!isSaved) {
-      // If the post is not saved for the user, save it
-      user.savedPosts.push(post);
-      await user.save();
-      console.log("Post saved successfully");
-
-      // Return updated saved posts for the user
-      return res.status(200).json(user.savedPosts);
-    } else {
-      console.log("Post already saved");
-      return res.status(400).json({ error: "Post already saved" });
-    }
+  const post = await PostModel.findById(postId);
+  console.log(user,post);
+  const isSaved = user.savedPosts.some(savedPost =>
+     savedPost.equals(post._id)
+  );
+  console.log(isSaved);
+      if (!isSaved) {
+          user.savedPosts.push(post);
+          await user.save();
+          console.log("Post saved successfully");
+    
+          // Return updated saved posts for the user
+          return res.status(200).json(user.savedPosts);
+        } else {
+          console.log("Post already saved");
+          return res.status(400).json({ error: "Post already saved" });
+        }
   } catch (error) {
-    console.error("Error while saving post:", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-});
+        console.error("Error while saving post:", error);
+        return res.status(500).json({ error: "Internal server error" });
+      }
 
-// Get saved posts
+ });
+
+
 router.get("/savedPosts/:userID", async (req, res) => {
   try {
     const user = await UserModel.findById(req.params.userID);
@@ -118,7 +112,7 @@ router.get("/savedPosts/:userID", async (req, res) => {
 
     // Populate the savedPosts array with the actual post objects
     const savedPosts = await PostModel.find({ _id: { $in: user.savedPosts} });
-     console.log(savedPosts);
+   
      res.status(200).json({ savedPosts });
   } catch (err) {
     console.error(err);
@@ -138,6 +132,23 @@ router.delete("/deletePost", async (req, res) => {
   } catch (error) {
     console.error("Error deleting post:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.delete("/deleteSaved/:postID", async (req, res) => {
+  try {
+    const { postID} = req.params;
+    const user = await UserModel.findOne({ savedPosts:postID });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.savedPosts = user.savedPosts.filter((savedPost) => {
+      return !savedPost.equals(postID);
+    });
+    await user.save();
+    res.json({ message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error in delete saved:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
