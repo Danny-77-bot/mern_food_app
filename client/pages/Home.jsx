@@ -71,7 +71,7 @@ const Home = () => {
                   onClick={() => savePost(post._id)}
                   disabled={isPostSaved.includes(post._id)}
                   style={{
-                    backgroundColor: isPostSaved.includes(post._id) ? "rgba(0,0,0, 0.5)" : "black"
+                    backgroundColor: isPostSaved.includes(post._id) ? "rgba(0,0,0 , 0.5)" : "black"
                   }}
                 >
                   {isPostSaved.includes(post._id) ? "Saved" : "Save"}
