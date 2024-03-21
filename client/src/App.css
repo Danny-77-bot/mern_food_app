@@ -10,7 +10,7 @@ body {
   padding:0;
 
 }
-h1 {
+h1,h2 {
   text-align: center;
 }
 .register,.login {
@@ -71,27 +71,12 @@ ul {
   list-style-type:none;
   padding:0;
   margin:0;
-  margin-top: 40px;
+  margin-bottom:70px;
 }
-li {
 
-  box-shadow: 0 0 10px rgba(0,0,0,.1);
- padding :10px;
- margin-bottom: 40px;
- height:400px;
- width:100%;
- 
-}
-li img {
-  object-fit:cover;
-  height:300px;
-  width:100%;
-}
 h2 {
   margin-top: 0;
 }
-
-
 
 @media (max-width: 800px) {
   .app {
@@ -103,26 +88,11 @@ h2 {
     width:100%;
     height:30%;
   }
-  .list-group {
-   width:100%;
-   display: flex;
-   flex-direction: column;
-    justify-content: space-around;
-    row-gap: 70px;
-    align-items: center;
-  }
+ 
 }
 @media (min-width:800px) and (max-width: 1000px) {
  
-  .list-group {
-    width:auto;
-    display:grid;
-    grid-template-columns:1fr;
-    column-gap: 50px;
-    row-gap: 80px;
-    justify-content: space-around;
-    align-items: center;
-  }
+ 
   .navbar img {
     width:120px;
     margin-right: 300px;
@@ -130,14 +100,6 @@ h2 {
 }
 @media (min-width:1000px){
  
-  .list-group {
-    width:200%;
-   display: flex;
-   flex-direction: column;
-    justify-content: space-around;
-    row-gap: 90px;
-    align-items: center;
-  }
   .navbar img {
     width:120px;
     margin-right: 500px;
@@ -158,6 +120,7 @@ h2 {
    align-items: center;
   justify-content: center;
   gap:40px;
+  box-shadow: 0 0 10 rgba(0,0,0,.2);
  
 }
 .create-post form {
@@ -207,12 +170,7 @@ h2 {
 button {
   cursor:pointer;
 }
-.home-post-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+
 .home-btn{
 display: flex;
 justify-content:space-between;
@@ -226,4 +184,145 @@ justify-content:space-between;
 .navbar img {
 width: 100px;
 margin-left:0;
+}
+.profile {
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+}
+.profile img {
+  width:100px;
+  border-radius: 50%;
+}
+.profile p {
+  font-size: 30px;
+}
+
+.profile button {
+  width:40%;
+  height:50px;
+  padding:5px;
+  border-radius:30px;
+  outline: none;
+  border:none;
+  font-size: 20px;
+}
+
+.home-box {
+  width:70%;
+  margin-top:30px;
+  margin:auto;
+  display: flex;
+  flex-direction: column;
+   font-size: 25px;
+}
+.post {
+  width:100%;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+}
+.post img {
+  width:100%;
+}
+.home-post-box {
+  display:flex;
+  flex-direction: column;
+
+
+}
+.home-post-box .postimg {
+  margin-top:10px;
+}
+.post li {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.save-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width:70%;
+  margin:auto;
+  padding:2px;
+  font-size: 25px;
+}
+.save-container img {
+  width:100%;
+}
+.save-list {
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+  display: flex;
+  flex-direction: column;
+  gap:100px;
+  align-items: center;
+}
+
+.upload-box {
+  margin-top: 40px;
+  margin-bottom: -20px;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+}
+.create-post button {
+  margin-top: 25px;
+}
+.home-post-box .desc {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.chat {
+display:flex;
+ width:100%;
+ height:400px;
+ margin-top: -130px;
+}
+
+.chat-left-wrapper,
+.chat-center-wrapper,
+.chat-right-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  padding: 10px;
+}
+
+.chat-left {
+  flex:3.5;
+  margin-top: 300px;
+}
+
+.chat-center {
+  flex:5.5;
+}
+
+.chat-right {
+  flex:3;
+}
+.chat-menu-input {
+  width:90%;
+  padding:10px 0;
+  border:none;
+  border-bottom:  1px solid gray;
+}
+.conversaton {
+  display: flex;
+  flex-direction: column;
+  gap:40px;
+  height: 300px; /* Set the desired height for the container */
+  overflow: auto; 
+}
+
+
+.conversation-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile {
+  width: 200px; /* Set the width of each profile item */
+  margin: 10px;
 }

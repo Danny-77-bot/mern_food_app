@@ -4,17 +4,23 @@ import { useGetUserID } from "../src/hooks/useGetUserId";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [profiles, setProfiles] = useState([]);
   const [isPostSaved, setIsPostSaved] = useState([]);
   const userID = useGetUserID();
-
-  // Load saved posts on initial render
-  useEffect(() => {
-    const fetchPosts = async () => {
+console.log(profiles);
+  // Load saved posts and profiles on initial render
+  useEffect(() => { 
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3005/posts");
-        setPosts(response.data);
+        // Fetch profiles
+        const profilesResponse = await axios.get("http://localhost:3005/profiles");
+        setProfiles(profilesResponse.data);
 
-        // Fetch the saved post IDs from local storage
+        // Fetch posts
+        const postsResponse = await axios.get("http://localhost:3005/posts");
+        setPosts(postsResponse.data);
+
+        // Fetch saved posts from local storage
         const savedPosts = JSON.parse(localStorage.getItem("savedPosts")) || [];
         setIsPostSaved(savedPosts);
       } catch (err) {
@@ -22,7 +28,7 @@ const Home = () => {
       }
     };
 
-    fetchPosts();
+    fetchData();
   }, []);
 
   const savePost = async (postId) => {
@@ -32,7 +38,7 @@ const Home = () => {
         userID
       });
 
-      // Update the saved post IDs in local storage and state
+      // Update saved posts in local storage and state
       const updatedSavedPosts = [...isPostSaved, postId];
       localStorage.setItem("savedPosts", JSON.stringify(updatedSavedPosts));
       setIsPostSaved(updatedSavedPosts);
@@ -44,15 +50,15 @@ const Home = () => {
   const deleteCreatedPost = async (postId) => {
     try {
       await axios.delete("http://localhost:3005/posts/deletePost", {
-        data: { userID, postId } // Send userID and postId as an object
+        data: { userID, postId }
       });
 
-      // Remove the deleted post from the saved post IDs in local storage and state
+      // Remove deleted post from saved posts in local storage and state
       const updatedSavedPosts = isPostSaved.filter((savedPostId) => savedPostId !== postId);
       localStorage.setItem("savedPosts", JSON.stringify(updatedSavedPosts));
       setIsPostSaved(updatedSavedPosts);
 
-      // Remove the deleted post from the local state
+      // Remove deleted post from local state
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
     } catch (error) {
       console.log(error);
@@ -60,46 +66,121 @@ const Home = () => {
   };
 
   return (
+    <div className="home-box">
+      {/* Display current user's profile */}
+     <div className="profile-wrapper">
+     {profiles.map((profile) => {
+       if(profile.userOwner===userID) {
+        return (
+          <div className="profile" key={profile._id}>
+            <img src={`http://localhost:3005/api/assets/uploads/${profile.imageUrl}`} alt={profile.name} />
+            <button>What's on your mind?</button>
+            <p>Photo</p>
+          </div>
+        );
+       }
+         
+      
+        return null;
+      })}
+
+      {/* Display current user's posts */}
+      {<ul className="post">
+        {posts.map((post) => {
+          if (post.userOwner === userID) {
+            return (
+              <li key={post._id}>
+                <div className="home-btn">
+                  <div>
+                    <button
+                      onClick={() => savePost(post._id)}
+                      disabled={isPostSaved.includes(post._id)}
+                      style={{
+                        backgroundColor: isPostSaved.includes(post._id) ? "rgba(0,0,0 , 0.5)" : "red"
+                      }}
+                    >
+                      {isPostSaved.includes(post._id) ? "Saved" : "Save"}
+                    </button>
+                  </div>
+
+                  <div>
+                    {post.userOwner === userID && (
+                      <button onClick={() => deleteCreatedPost(post._id)}>X</button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="home-post-box">
+                  <h2>{post.name}</h2>
+                  <div className="desc">{post.description}</div>
+
+                  {post.imageUrl && (
+                    <img className="postimg"
+                      src={`http://localhost:3005/api/assets/uploads/${post.imageUrl}`}
+                      alt={post.name}
+                    />
+                  )}
+                </div>
+              </li>
+            );
+          }
+          return null; // Add a return statement for the else case
+        })}
+      </ul> }
+     </div>
+   <hr/>
     <div>
-      <h1>Posts</h1>
-      <ul>
-        {posts.map((post) => (
-          <li key={post._id}>
-            <div className="home-btn">
-              <div>
-                <button
-                  onClick={() => savePost(post._id)}
-                  disabled={isPostSaved.includes(post._id)}
-                  style={{
-                    backgroundColor: isPostSaved.includes(post._id) ? "rgba(0,0,0 , 0.5)" : "black"
-                  }}
-                >
-                  {isPostSaved.includes(post._id) ? "Saved" : "Save"}
-                </button>
+    {profiles.map((profile) => {
+        if (profile.userOwner !== userID) {
+          return (
+            <div key={profile._id}>
+              <div className="profile">
+                <img src={`http://localhost:3005/api/assets/uploads/${profile.imageUrl}`} alt={profile.name} />
+                <p>{profile.name}</p>
               </div>
 
-              <div>
-                {post.userOwner === userID && (
-                  <button onClick={() => deleteCreatedPost(post._id)}>X</button>
-                )}
-              </div>
-            </div>
 
-            <div className="home-post-box">
-              <h2>{post.name}</h2>
-              <div>{post.description}</div>
+              <ul className="post">
+                {posts.map((post) => {
+                  if (post.userOwner === profile.userOwner) {
+                    return (
+                      <li key={post._id}>
 
-              {post.imageUrl && (
-                <img
-                  src={`http://localhost:3005/api/assets/uploads/${post.imageUrl}`}
-                  alt={post.name}
-                />
-              )}
+<div>
+                    <button
+                      onClick={() => savePost(post._id)}
+                      disabled={isPostSaved.includes(post._id)}
+                      style={{
+                        backgroundColor: isPostSaved.includes(post._id) ? "rgba(0,0,0 , 0.5)" : "red"
+                      }}
+                    >
+                      {isPostSaved.includes(post._id) ? "Saved" : "Save"}
+                    </button>
+                  </div>
+                        <div className="home-post-box">
+                          <h2>{post.name}</h2>
+                          <div className="desc">{post.description}</div>
+                          {post.imageUrl && (
+                            <img
+                              src={`http://localhost:3005/api/assets/uploads/${post.imageUrl}`}
+                              alt={post.name}
+                            />
+                          )}
+                        </div>
+                      </li>
+                    );
+                  }
+                  return null;
+                })}
+              </ul>
             </div>
-          </li>
-        ))}
-      </ul>
+          );
+        }
+        return null;
+      })}
     </div>
+   
+   </div>
   );
 };
 

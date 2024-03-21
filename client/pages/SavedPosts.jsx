@@ -30,9 +30,9 @@ export default function SavedRecipes() {
   };
 
   return (
-    <div>
+    <div className="save-container">
       <h1>Saved Posts</h1>
-      <ul>
+      <ul className="save-list">
         {savedPosts.map((post) => (
           <li key={post._id}>
             <div>
